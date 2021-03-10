@@ -1,9 +1,9 @@
+using Microsoft.AspNetCore.Mvc.Rendering; //to access SelectList
+using Microsoft.EntityFrameworkCore; // to access EntityState
 using Microsoft.AspNetCore.Mvc;
 using ToDoList.Models;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore; // to access EntityState
-
 
 namespace ToDoList.Controllers
 {
@@ -18,12 +18,13 @@ namespace ToDoList.Controllers
 
     public ActionResult Index()
     {
-      List<Item> model = _db.Items.ToList();
+      List<Item> model = _db.Items.Include(item => item.Category).ToList(); //each item only has 1 category so eager loading is ok here
       return View(model);
     }
 
     public ActionResult Create()
     {
+      ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name");
       return View();
     }
 
@@ -43,7 +44,8 @@ namespace ToDoList.Controllers
 
     public ActionResult Edit(int id) // GET edit action
     {
-      var thisItem = _db.Items.FirstOrDefault(item => item.ItemId == id); //finds specific item and passes it into view
+      var thisItem = _db.Items.FirstOrDefault(item => item.ItemId == id);
+      ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name");
       return View(thisItem);
     }
 
