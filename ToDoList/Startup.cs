@@ -39,7 +39,7 @@ namespace ToDoList
         routes.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
       });
 
-      app.UseStaticFiles();
+      app.UseStaticFiles(); /// what does it mean????
 
       app.Run(async (context) =>
       {
