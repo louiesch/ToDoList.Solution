@@ -17,7 +17,7 @@
 
 * _Clone repository from GitHub to desired location using: $ git clone https://github.com/louiesch/ToDoList_
 * _Navigate to and open project directory in terminal_
-  > cd ToDoList.
+  > cd ToDoList
   
 * _Download MySQL and MySQL Workbench to set up a local database._
 
