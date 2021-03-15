@@ -50,34 +50,65 @@ namespace ToDoList.Controllers
     }
 
 
-// //     public ActionResult Edit(int id) // GET edit action
-// //     {
-// //       var thisItem = _db.Items.FirstOrDefault(item => item.ItemId == id);
-// //       ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name");
-// //       return View(thisItem);
-// //     }
+    public ActionResult Edit(int id)
+    {
+      var thisItem = _db.Items.FirstOrDefault(item => item.ItemId == id);
+      ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name");
+      return View(thisItem);
+    }
 
-// //     [HttpPost]
-// //     public ActionResult Edit(Item item) //POST edit action
-// //     {
-// //       _db.Entry(item).State = EntityState.Modified;
-// //       _db.SaveChanges();
-// //       return RedirectToAction("Index");
-// //     }
+    [HttpPost]
+    public ActionResult Edit(Item item, int CategoryId, bool ItemComplete)
+    {
+      if (CategoryId != 0)
+      {
+        _db.CategoryItem.Add(new CategoryItem() { CategoryId = CategoryId, ItemId = item.ItemId });
+      }
+      item.ItemComplete = ItemComplete;
+      _db.Entry(item).State = EntityState.Modified;
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    }
 
-// //     public ActionResult Delete(int id)
-// //     {
-// //       var thisItem = _db.Items.FirstOrDefault(item => item.ItemId == id);
-// //       return View(thisItem);
-// //     }
+    public ActionResult AddCategory(int id)
+    {
+      var thisItem = _db.Items.FirstOrDefault(item => item.ItemId == id);
+      ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name");
+      return View(thisItem);
+    }
 
-// //     [HttpPost, ActionName("Delete")]
-// //     public ActionResult DeleteConfirmed(int id)
-// //     {
-// //       var thisItem = _db.Items.FirstOrDefault(item => item.ItemId == id);
-// //       _db.Items.Remove(thisItem);
-// //       _db.SaveChanges();
-// //       return RedirectToAction("Index");
-// //     }
+    [HttpPost]
+    public ActionResult AddCategory(Item item, int CategoryId)
+    {
+      if (CategoryId != 0)
+      {
+      _db.CategoryItem.Add(new CategoryItem() { CategoryId = CategoryId, ItemId = item.ItemId });        }
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    }
+
+    public ActionResult Delete(int id)
+    {
+      var thisItem = _db.Items.FirstOrDefault(item => item.ItemId == id);
+      return View(thisItem);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    public ActionResult DeleteConfirmed(int id)
+    {
+      var thisItem = _db.Items.FirstOrDefault(item => item.ItemId == id);
+      _db.Items.Remove(thisItem);
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    }
+
+    [HttpPost]
+    public ActionResult DeleteCategory(int joinId)
+    {
+      var joinEntry = _db.CategoryItem.FirstOrDefault(entry => entry.CategoryItemId == joinId);
+      _db.CategoryItem.Remove(joinEntry);
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    }
   }
 }
